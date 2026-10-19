@@ -204,7 +204,7 @@ export const KumoHeroVisual: React.FC = () => {
       {/* TOP FLOATING CONTROLS: JETON-STYLE SWITCHER TABS */}
       <div className="relative z-30 mb-8 flex flex-col items-center">
         {/* Flavor Selector Switcher */}
-        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 rounded-full bg-[#14141A]/90 border border-white/12 backdrop-blur-2xl shadow-2xl">
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 rounded-full bg-[#141416]/90 border border-white/12 backdrop-blur-2xl shadow-2xl">
           {OFFICIAL_FLAVORS.map((f) => {
             const isSelected = f.id === selectedFlavor.id
             return (
@@ -236,7 +236,7 @@ export const KumoHeroVisual: React.FC = () => {
         {/* LEFT COLUMN: ACTIVE FLAVOR & SENSORY METRICS (JETON HIGH-CONTRAST CARD) */}
         <div className="lg:col-span-3 flex flex-col gap-4 order-2 lg:order-1 text-left">
           {/* Flavor Sensory Breakdown Card */}
-          <div className="p-5 rounded-3xl bg-[#121218]/80 border border-white/10 backdrop-blur-2xl transition-all duration-500 hover:border-white/20 shadow-xl">
+          <div className="p-5 rounded-3xl bg-[#121214]/80 border border-white/10 backdrop-blur-2xl transition-all duration-500 hover:border-white/20 shadow-xl">
             <div className="flex items-center justify-between mb-3">
               <span
                 className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full border font-bold"
@@ -301,7 +301,7 @@ export const KumoHeroVisual: React.FC = () => {
           </div>
 
           {/* Sublingual Absorption Chip */}
-          <div className="p-4 rounded-2xl bg-[#121218]/60 border border-white/8 backdrop-blur-xl flex items-center gap-3">
+          <div className="p-4 rounded-2xl bg-[#121214]/60 border border-white/8 backdrop-blur-xl flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
               <Droplets className="w-5 h-5 text-[#FF5722]" />
             </div>
@@ -319,7 +319,7 @@ export const KumoHeroVisual: React.FC = () => {
             ref={containerRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="relative w-full rounded-3xl sm:rounded-[2.5rem] p-2.5 sm:p-3 bg-[#111116] border border-white/12 backdrop-blur-2xl transition-transform duration-500 ease-out will-change-transform shadow-2xl"
+            className="relative w-full rounded-3xl sm:rounded-[2.5rem] p-2.5 sm:p-3 bg-[#121214] border border-white/12 backdrop-blur-2xl transition-transform duration-500 ease-out will-change-transform shadow-2xl"
             style={{
               transform: `perspective(1200px) rotateX(${rotate.x}deg) rotateY(${rotate.y}deg)`,
               boxShadow: `0 35px 90px -20px rgba(0,0,0,0.9), 0 0 50px -10px ${selectedFlavor.glowColor}`
@@ -430,7 +430,7 @@ export const KumoHeroVisual: React.FC = () => {
         {/* RIGHT COLUMN: INTERACTIVE TACTILE MELT ENGINE & 5 ZEROES */}
         <div className="lg:col-span-3 flex flex-col gap-4 order-3 text-left">
           {/* Tactile Dissolution Simulator Card */}
-          <div className="p-5 rounded-3xl bg-[#121218]/80 border border-white/10 backdrop-blur-2xl transition-all duration-500 hover:border-white/20 shadow-xl">
+          <div className="p-5 rounded-3xl bg-[#121214]/80 border border-white/10 backdrop-blur-2xl transition-all duration-500 hover:border-white/20 shadow-xl">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] font-mono uppercase tracking-widest text-[#FF5722] font-bold">
                 ThinSol™ Science
@@ -492,7 +492,7 @@ export const KumoHeroVisual: React.FC = () => {
           </div>
 
           {/* 5 Zeroes™ Pharmaceutical & Cleanroom Guarantee */}
-          <div className="p-4 rounded-2xl bg-[#121218]/60 border border-white/8 backdrop-blur-xl">
+          <div className="p-4 rounded-2xl bg-[#121214]/60 border border-white/8 backdrop-blur-xl">
             <div className="flex items-center gap-2 mb-2">
               <ShieldCheck className="w-4 h-4 text-[#FF5722]" />
               <span className="text-xs font-bold text-white tracking-wide">The 5 Zeroes™</span>

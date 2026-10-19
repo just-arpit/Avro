@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { ArrowUpRight, Menu, X, Sparkles, Home, Layers, Zap, Shield, ArrowRight } from 'lucide-react'
+import { ArrowRight, Menu, X, Sun, Moon } from 'lucide-react'
 import { FlavorData } from '../constants/flavors'
+import { useTheme } from '../context/ThemeContext'
 
 interface NavbarProps {
   onOpenWaitlist: () => void
@@ -8,24 +9,28 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenWaitlist, activeFlavor }) => {
-
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40)
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 60)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [mobileMenuOpen])
+
   const navLinks = [
-    { name: 'Technology', href: '#unify-focus' },
-    { name: '30s Ritual', href: '#how-it-works' },
-    { name: '3-Layer Pack', href: '#packaging-architecture' },
+    { name: 'Product', href: '#product' },
+    { name: 'Ritual', href: '#ritual' },
     { name: 'Flavors', href: '#flavors' },
-    { name: 'Comparison', href: '#comparison' },
+    { name: 'Why AVRO', href: '#why-avro' },
+    { name: 'Story', href: '#story' },
     { name: 'FAQ', href: '#faq' },
   ]
 
@@ -37,176 +42,126 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenWaitlist, activeFlavor }) 
       const topOffset = 80
       const elementPosition = element.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - topOffset
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      })
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
     }
   }
 
   return (
-    <>
-      {/* Top Main Navigation Bar */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          scrolled
-            ? 'py-3.5 bg-[#09090C]/90 backdrop-blur-2xl border-b border-white/[0.08] shadow-2xl'
-            : 'py-5 bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            {/* Brand Wordmark & Logo */}
-            <a
-              href="#"
-              className="flex items-center gap-3 group focus:outline-none"
-              aria-label="AVRO Home"
+    <header
+      id="avro-nav"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? 'py-3 bg-[#fdfcfc]/90 dark:bg-[#06060A]/80 backdrop-blur-2xl border-b border-[#ebe8e4] dark:border-white/[0.06] shadow-sm'
+          : 'py-5 bg-transparent'
+      }`}
+    >
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <a href="#" className="flex items-center gap-3 group" aria-label="AVRO Home">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 720 153"
+              className="h-5 sm:h-6 w-auto text-[#000000] dark:text-white fill-current transition-opacity group-hover:opacity-80"
+              shapeRendering="geometricPrecision"
             >
-              <div className="h-7 w-auto flex items-center">
-                <img
-                  src="/assets/avro-logo-white.png"
-                  alt="AVRO Logo"
-                  className="h-6 sm:h-7 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <span
-                className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 border text-[10px] font-mono tracking-widest uppercase text-white/90 transition-colors"
-                style={{
-                  borderColor: activeFlavor ? `${activeFlavor.color}66` : 'rgba(255,255,255,0.2)'
-                }}
+              <path
+                d="M 126 14 L 164 14 L 191 134 L 149 134 L 144 98 L 82 98 L 48 134 L 8 134 Z M 143 44 L 116 76 L 154 76 Z M 182 14 L 221 14 L 245 96 L 320 14 L 360 14 L 258 134 L 219 134 Z M 376 14 L 466 14 C 498 14, 516 30, 516 54 C 516 76, 498 90, 464 91 L 496 136 L 452 136 L 424 92 L 388 92 L 376 136 L 336 136 Z M 410 40 L 446 40 Q 472 55 442 70 L 400 70 Z M 585 16 L 678 16 C 698 16, 710 30, 708 48 L 684 116 C 682 128, 670 138, 654 138 L 562 138 C 538 138, 518 126, 518 108 L 542 46 C 544 30, 560 16, 585 16 Z M 586 46 L 648 46 C 662 46, 670 52, 668 62 L 654 96 C 652 104, 644 110, 630 110 L 570 110 C 556 110, 550 104, 552 94 L 566 62 C 568 52, 574 46, 586 46 Z"
+                fill="currentColor"
+                fillRule="evenodd"
+              />
+            </svg>
+          </a>
+
+          {/* Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleLinkClick(e, link.href)}
+                className="px-4 py-1.5 text-[14px] font-[400] text-[#777169] hover:text-[#000000] dark:text-white/60 dark:hover:text-white transition-colors duration-200"
               >
-                <span
-                  className="w-1.5 h-1.5 rounded-full animate-pulse"
-                  style={{ backgroundColor: activeFlavor ? activeFlavor.color : '#34C771' }}
-                />
-                <span>THINSOL™ STRIPS</span>
-              </span>
-            </a>
+                {link.name}
+              </a>
+            ))}
+          </nav>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-1 p-1 bg-white/10 border border-white/15 rounded-full backdrop-blur-xl">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleLinkClick(e, link.href)}
-                  className="px-4 py-1.5 rounded-full text-xs font-medium text-white/80 hover:text-white hover:bg-white/15 transition-all duration-200"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </nav>
+          {/* Right Controls: Theme Toggle + CTA */}
+          <div className="flex items-center gap-3">
+            {/* Theme Toggle Pill Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full border border-[#ebe8e4] dark:border-white/10 bg-[#f5f3f1] dark:bg-white/5 text-[#44403b] hover:text-[#000000] dark:text-white/70 dark:hover:text-white transition-all cursor-pointer hover:bg-[#ebe8e4]"
+              aria-label={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+              title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+            >
+              {theme === 'light' ? (
+                <Moon className="w-4 h-4 text-[#44403b]" />
+              ) : (
+                <Sun className="w-4 h-4 text-amber-300" />
+              )}
+            </button>
 
-            {/* Header Action: Jeton-style High-Contrast White Pill */}
-            <div className="hidden sm:flex items-center gap-3">
-              <span className="text-[11px] font-mono text-white/80 px-2 py-1 rounded-full bg-white/10 hidden xl:inline-block">
-                WHO-GMP
-              </span>
+            {/* Filled Pill CTA Button (ElevenLabs Spec: #000000 fill, white text, 9999px radius, 14px/500, 1px border) */}
+            <button
+              onClick={onOpenWaitlist}
+              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-[#000000] text-white dark:bg-white dark:text-[#06060A] px-5 py-2 text-[14px] font-[500] tracking-normal hover:opacity-90 transition-all duration-200 active:scale-[0.98] border border-[#e5e5e5] dark:border-transparent cursor-pointer shadow-sm"
+            >
+              <span>Join Waitlist</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
 
-              <button
-                onClick={onOpenWaitlist}
-                className="group relative inline-flex items-center gap-2 rounded-full bg-white hover:bg-black text-black hover:text-white px-5 py-2.5 text-xs font-bold tracking-wider uppercase transition-all duration-300 shadow-xl active:scale-95 cursor-pointer"
-                style={{
-                  boxShadow: activeFlavor ? `0 4px 20px -2px ${activeFlavor.glowColor}` : undefined
-                }}
-              >
-                <span>Pre-Order Batch 01</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
-              </button>
-            </div>
-
-            {/* Mobile Menu Button */}
+            {/* Mobile Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors"
+              className="lg:hidden p-2 rounded-lg text-[#000000] dark:text-white/70 hover:opacity-80 transition-colors"
               aria-label="Toggle Navigation"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
-
-        {/* Mobile Drawer */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#0A0A0E]/98 backdrop-blur-2xl border-b border-white/10 px-6 py-6 animate-fade-in text-white">
-            <nav className="flex flex-col gap-3">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleLinkClick(e, link.href)}
-                  className="text-sm font-medium text-white/80 hover:text-white py-2 border-b border-white/5"
-                >
-                  {link.name}
-                </a>
-              ))}
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  onOpenWaitlist()
-                }}
-                className="mt-4 w-full py-3.5 rounded-full bg-[#F73B20] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#F73B20]/30"
-              >
-                <span>Pre-Order Batch 01</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </nav>
-          </div>
-        )}
-      </header>
-
-      {/* Floating Bottom Pill Dock (Signature Jeton Desktop Element) */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 hidden md:flex items-center gap-2 p-1.5 rounded-full bg-[#111116]/85 border border-white/15 backdrop-blur-2xl shadow-2xl shadow-black/50 text-white text-xs font-medium">
-        <a
-          href="#"
-          className="p-2 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-all"
-          title="Home"
-        >
-          <Home className="w-4 h-4" />
-        </a>
-
-        <div className="w-px h-4 bg-white/15 mx-1" />
-
-        <a
-          href="#unify-focus"
-          onClick={(e) => handleLinkClick(e, '#unify-focus')}
-          className="px-3 py-1.5 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-all text-xs"
-        >
-          Technology
-        </a>
-
-        <a
-          href="#how-it-works"
-          onClick={(e) => handleLinkClick(e, '#how-it-works')}
-          className="px-3 py-1.5 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-all text-xs"
-        >
-          Ritual
-        </a>
-
-        <a
-          href="#packaging-architecture"
-          onClick={(e) => handleLinkClick(e, '#packaging-architecture')}
-          className="px-3 py-1.5 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-all text-xs"
-        >
-          Packaging
-        </a>
-
-        <a
-          href="#flavors"
-          onClick={(e) => handleLinkClick(e, '#flavors')}
-          className="px-3 py-1.5 rounded-full hover:bg-white/10 text-white/80 hover:text-white transition-all text-xs"
-        >
-          Flavors
-        </a>
-
-        <button
-          onClick={onOpenWaitlist}
-          className="ml-1 px-4 py-1.5 rounded-full bg-[#F73B20] hover:bg-white text-white hover:text-black text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-md cursor-pointer"
-        >
-          Pre-Order
-        </button>
       </div>
-    </>
+
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 top-[56px] bg-[#fdfcfc]/98 dark:bg-[#06060A]/98 backdrop-blur-2xl z-40 animate-fade-in border-t border-[#ebe8e4] dark:border-white/10">
+          <nav className="flex flex-col gap-2 px-6 py-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleLinkClick(e, link.href)}
+                className="text-2xl font-[300] tracking-[-0.02em] text-[#000000] dark:text-white/80 hover:opacity-70 py-3 border-b border-[#ebe8e4] dark:border-white/[0.04] transition-colors"
+              >
+                {link.name}
+              </a>
+            ))}
+            <div className="pt-4 flex items-center justify-between">
+              <span className="text-sm text-[#777169] dark:text-white/60">Theme</span>
+              <button
+                onClick={toggleTheme}
+                className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#ebe8e4] dark:border-white/10 bg-[#f5f3f1] dark:bg-white/5 text-sm font-medium"
+              >
+                {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4 text-amber-300" />}
+                <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+              </button>
+            </div>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false)
+                onOpenWaitlist()
+              }}
+              className="mt-6 w-full py-4 rounded-full bg-[#000000] text-white dark:bg-white dark:text-black font-[500] text-sm tracking-wide flex items-center justify-center gap-2 cursor-pointer shadow-md"
+            >
+              <span>Join Waitlist</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </nav>
+        </div>
+      )}
+    </header>
   )
 }
+

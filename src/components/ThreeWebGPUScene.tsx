@@ -681,6 +681,8 @@ export const ThreeWebGPUScene: React.FC<ThreeWebGPUSceneProps> = ({
         canvas.style.display = 'block'
         canvas.style.width = '100%'
         canvas.style.height = '100%'
+        canvas.style.touchAction = 'none'
+        canvas.style.cursor = 'grab'
         container.appendChild(canvas)
 
         const gpuRenderer = new WebGPURenderer({
@@ -703,14 +705,22 @@ export const ThreeWebGPUScene: React.FC<ThreeWebGPUSceneProps> = ({
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
         renderer.setSize(width, height)
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        renderer.domElement.style.display = 'block'
+        renderer.domElement.style.width = '100%'
+        renderer.domElement.style.height = '100%'
+        renderer.domElement.style.touchAction = 'none'
+        renderer.domElement.style.cursor = 'grab'
         container.appendChild(renderer.domElement)
       }
 
       // --- MOUSE & TOUCH EVENT LISTENERS ---
       const onMouseDown = (e: MouseEvent) => {
+        if (e.button !== 0) return
         mouse.isDragging = true
         mouse.prevX = e.clientX
         mouse.prevY = e.clientY
+        container.style.cursor = 'grabbing'
+        document.body.style.cursor = 'grabbing'
       }
 
       const onMouseMove = (e: MouseEvent) => {
@@ -721,9 +731,9 @@ export const ThreeWebGPUScene: React.FC<ThreeWebGPUSceneProps> = ({
         if (mouse.isDragging) {
           const deltaX = e.clientX - mouse.prevX
           const deltaY = e.clientY - mouse.prevY
-          mouse.targetRotY += deltaX * 0.008
-          mouse.targetRotX += deltaY * 0.008
-          mouse.targetRotX = Math.max(-0.6, Math.min(0.6, mouse.targetRotX))
+          mouse.targetRotY += deltaX * 0.010
+          mouse.targetRotX += deltaY * 0.010
+          mouse.targetRotX = Math.max(-0.7, Math.min(0.7, mouse.targetRotX))
           mouse.prevX = e.clientX
           mouse.prevY = e.clientY
         }
@@ -731,6 +741,8 @@ export const ThreeWebGPUScene: React.FC<ThreeWebGPUSceneProps> = ({
 
       const onMouseUp = () => {
         mouse.isDragging = false
+        container.style.cursor = 'grab'
+        document.body.style.cursor = ''
       }
 
       const onTouchStart = (e: TouchEvent) => {
@@ -745,9 +757,9 @@ export const ThreeWebGPUScene: React.FC<ThreeWebGPUSceneProps> = ({
         if (mouse.isDragging && e.touches.length === 1) {
           const deltaX = e.touches[0].clientX - mouse.prevX
           const deltaY = e.touches[0].clientY - mouse.prevY
-          mouse.targetRotY += deltaX * 0.008
-          mouse.targetRotX += deltaY * 0.008
-          mouse.targetRotX = Math.max(-0.6, Math.min(0.6, mouse.targetRotX))
+          mouse.targetRotY += deltaX * 0.010
+          mouse.targetRotX += deltaY * 0.010
+          mouse.targetRotX = Math.max(-0.7, Math.min(0.7, mouse.targetRotX))
           mouse.prevX = e.touches[0].clientX
           mouse.prevY = e.touches[0].clientY
         }

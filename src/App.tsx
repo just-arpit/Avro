@@ -1,16 +1,12 @@
 import React, { useState } from 'react'
+import { ThemeProvider } from './context/ThemeContext'
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
 import { StatsTicker } from './components/StatsTicker'
-import { UnifyFocusSection } from './components/UnifyFocusSection'
-import { StepperRitual } from './components/StepperRitual'
 import { PackagingArchitecture } from './components/PackagingArchitecture'
+import { StepperRitual } from './components/StepperRitual'
 import { FlavorLineup } from './components/FlavorLineup'
-import { ProductBenefits } from './components/ProductBenefits'
-import { VariantsSection } from './components/VariantsSection'
-import { UseCasesSection } from './components/UseCasesSection'
-import { ComparisonSection } from './components/ComparisonSection'
-import { ValidationSection } from './components/ValidationSection'
+import { WhyAvroSection } from './components/WhyAvroSection'
 import { BrandStory } from './components/BrandStory'
 import { FAQSection } from './components/FAQSection'
 import { CTASection } from './components/CTASection'
@@ -18,7 +14,7 @@ import { Footer } from './components/Footer'
 import { WaitlistModal } from './components/WaitlistModal'
 import { FLAVORS, FlavorData } from './constants/flavors'
 
-export default function App() {
+function AppContent() {
   const [waitlistOpen, setWaitlistOpen] = useState(false)
   const [activeFlavor, setActiveFlavor] = useState<FlavorData>(FLAVORS[0])
 
@@ -27,7 +23,7 @@ export default function App() {
 
   return (
     <div
-      className="min-h-screen bg-[#08080C] text-[#F5F5F2] selection:bg-[#F73B20]/30 selection:text-[#F73B20] relative font-sans transition-colors duration-700 ease-out"
+      className="min-h-screen bg-[#fdfcfc] dark:bg-[#06060A] text-[#000000] dark:text-[#F5F5F2] selection:bg-[#ff4704]/20 selection:text-[#ff4704] relative font-['Inter',sans-serif] transition-colors duration-500 ease-out"
       style={{
         // Global flavor theme CSS variables
         ['--flavor-color' as any]: activeFlavor.color,
@@ -42,67 +38,60 @@ export default function App() {
         activeFlavor={activeFlavor}
       />
 
-      {/* Main Content Sections */}
+      {/* Main Content: 7-Stage Cinematic Narrative */}
       <main>
-        {/* 1. Full-Bleed Hero with Three.js WebGPU + Real 3D Product Packaging & Floating Strips */}
+        {/* Stage 1: The Reveal — 3D Product Scene + Interstellar Fluid + Flavor Switcher */}
         <Hero
           onOpenWaitlist={handleOpenWaitlist}
           activeFlavor={activeFlavor}
           onSelectFlavor={setActiveFlavor}
         />
 
-        {/* 2. Product Performance & Purity Ticker */}
+        {/* Transition: Purity & Formulation Metrics */}
         <StatsTicker activeFlavor={activeFlavor} />
 
-        {/* 3. Jeton-Style "Unify your focus" Light Alabaster Section with Vibrant Pill Badges */}
-        <UnifyFocusSection activeFlavor={activeFlavor} />
-
-        {/* 4. Jeton-Style 5-Step Numbered Interactive Stepper */}
-        <StepperRitual />
-
-        {/* 5. 3-Layer Packaging Architecture */}
+        {/* Stage 2: The Product — 3-Layer Packaging Architecture & Macro Details */}
         <PackagingArchitecture />
 
-        {/* 6. 5-Flavor Lineup Studio (Mint, Citrus, Blood Orange, Berry, Tropical) */}
+        {/* Stage 3: The Ritual — 5-Step Interactive 30-Second Dissolution Sequence */}
+        <StepperRitual />
+
+        {/* Stage 4: Flavors — 5 Signature Profiles & 3D Adaptive Studio */}
         <FlavorLineup
           onOpenWaitlist={handleOpenWaitlist}
           activeFlavor={activeFlavor}
           onSelectFlavor={setActiveFlavor}
         />
 
-        {/* 7. 5 Zeroes™ Architectural Benefits Grid */}
-        <ProductBenefits />
+        {/* Stage 5: Why AVRO — 4 Architectural Pillars & Direct Format Comparison Matrix */}
+        <WhyAvroSection />
 
-        {/* 8. Modular Formulations: Caffeine vs Caffeine-Free Duo */}
-        <VariantsSection onOpenWaitlist={handleOpenWaitlist} />
-
-        {/* 9. Everyday Carry (EDC) Lifestyle Contexts */}
-        <UseCasesSection />
-
-        {/* 10. Direct Format Comparison: AVRO vs Drinks vs Bulky Pills */}
-        <ComparisonSection />
-
-        {/* 11. Clinical & Pharmaceutical Cleanroom Standards */}
-        <ValidationSection />
-
-        {/* 12. Brand Origin & Purpose */}
+        {/* Stage 6: Brand Story — Origin, Design Vision & Everyday Carry (EDC) Contexts */}
         <BrandStory />
 
-        {/* 13. Numbered Technical FAQ */}
-        <FAQSection />
+        {/* Stage 7: Questions & Truth — 13g.fr-style FAQ with animated pill cards */}
+        <FAQSection onOpenWaitlist={handleOpenWaitlist} />
 
-        {/* 14. Conversion Finale */}
+        {/* Conversion Finale: Priority Access Reservation */}
         <CTASection
           onOpenWaitlist={handleOpenWaitlist}
           activeFlavor={activeFlavor}
         />
       </main>
 
-      {/* 15. Jeton-Style Massive Footer with Colossal Full-Width AVRO Wordmark */}
+      {/* Footer with Colossal Wordmark & Transparent Disclaimers */}
       <Footer onOpenWaitlist={handleOpenWaitlist} />
 
-      {/* Interactive Reservation / Waitlist Modal */}
+      {/* Early Access Waitlist Dialog (shadcn/ui primitive) */}
       <WaitlistModal isOpen={waitlistOpen} onClose={handleCloseWaitlist} />
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   )
 }

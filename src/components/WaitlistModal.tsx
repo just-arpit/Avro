@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
-import { X, CheckCircle, ArrowRight, Sparkles, Copy, Check, ShieldCheck } from 'lucide-react'
-import confetti from 'canvas-confetti'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog'
+import { ArrowRight, CheckCircle, Loader2 } from 'lucide-react'
 
 interface WaitlistModalProps {
   isOpen: boolean
@@ -10,209 +16,151 @@ interface WaitlistModalProps {
 export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [role, setRole] = useState('student')
-  const [flavor, setFlavor] = useState('mint')
   const [submitted, setSubmitted] = useState(false)
-  const [ticketNumber, setTicketNumber] = useState(247)
-  const [copied, setCopied] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
-  if (!isOpen) return null
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email) return
+    if (!email || !name) return
 
-    // Randomize realistic queue ticket number
-    const num = Math.floor(Math.random() * 50) + 210
-    setTicketNumber(num)
-    setSubmitted(true)
+    setSubmitting(true)
+    setError('')
 
-    // Trigger celebration confetti
+    // NOTE: No backend integration is currently configured.
+    // This simulates a local submission. The data is NOT persisted
+    // to any server or database. A real integration (e.g. Supabase,
+    // Airtable, or custom API) should replace this setTimeout.
     try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#FF5722', '#FFFFFF', '#0A0A0A'],
-      })
-    } catch (err) {
-      // Fallback
+      await new Promise(resolve => setTimeout(resolve, 800))
+      setSubmitted(true)
+    } catch {
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
     }
   }
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(`https://avro.in/waitlist?ref=AVRO-${ticketNumber}`)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      onClose()
+      // Reset state after close animation
+      setTimeout(() => {
+        setSubmitted(false)
+        setName('')
+        setEmail('')
+        setError('')
+      }, 300)
+    }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fade-in">
-      <div
-        className="relative w-full max-w-lg rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-8 bg-[#121218] border border-white/15 shadow-2xl backdrop-blur-2xl"
-        onClick={(e) => e.stopPropagation()}
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogContent
+        showCloseButton
+        className="!max-w-lg !rounded-[24px] !p-0 !bg-[#fdfcfc] dark:!bg-[#101012] !border-[#ebe8e4] dark:!border-white/[0.08] !ring-0 text-[#000000] dark:text-white shadow-2xl"
       >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-colors cursor-pointer"
-          aria-label="Close dialog"
-        >
-          <X className="w-4 h-4" />
-        </button>
-
         {!submitted ? (
-          <div>
-            {/* Modal Header */}
-            <div className="text-left mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FF5722]/15 text-[#FF5722] text-[10px] font-mono tracking-widest uppercase mb-3 border border-[#FF5722]/30">
-                <Sparkles className="w-3 h-3" />
-                <span>BATCH 01 PRIORITY ALLOCATION</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight uppercase">
-                RESERVE YOUR POSITION.
-              </h3>
-              <p className="text-xs sm:text-sm text-white/60 mt-1.5 font-normal leading-relaxed">
-                Join the early tester queue for the initial production run of AVRO functional oral strips.
-              </p>
-            </div>
+          <div className="p-6 sm:p-8">
+            <DialogHeader className="text-left mb-6">
+              <div className="label-mono text-[#000000]/60 dark:text-[#FF5722] mb-3 text-xs uppercase tracking-widest font-mono">Early Access</div>
+              <DialogTitle className="!text-2xl sm:!text-3xl font-light tracking-[-0.02em] !text-[#000000] dark:!text-white">
+                Reserve your spot.
+              </DialogTitle>
+              <DialogDescription className="!text-sm !text-[#777169] dark:!text-white/50 !mt-2 !leading-relaxed font-normal">
+                Join the waitlist for AVRO's first production batch.
+                We'll notify you when it's ready — no spam.
+              </DialogDescription>
+            </DialogHeader>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4 text-left">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-white/80 uppercase tracking-wider mb-1.5">
-                  Your Name
+                <label htmlFor="waitlist-name" className="block text-xs font-medium text-[#44403b] dark:text-white/60 uppercase tracking-wider mb-1.5">
+                  Name
                 </label>
                 <input
+                  id="waitlist-name"
                   type="text"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Aditya Sharma"
-                  className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#FF5722] focus:ring-1 focus:ring-[#FF5722] transition-all"
+                  placeholder="Your name"
+                  className="w-full px-4 py-3 rounded-[4px] bg-[#f5f3f1] dark:bg-white/[0.04] border border-[#ebe8e4] dark:border-white/[0.08] text-[#000000] dark:text-white placeholder-[#a59f97] dark:placeholder-white/25 text-sm focus:outline-none focus:border-[#000000]/40 dark:focus:border-white/40 transition-all"
+                  disabled={submitting}
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-white/80 uppercase tracking-wider mb-1.5">
-                  Email Address
+                <label htmlFor="waitlist-email" className="block text-xs font-medium text-[#44403b] dark:text-white/60 uppercase tracking-wider mb-1.5">
+                  Email
                 </label>
                 <input
+                  id="waitlist-email"
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="aditya@example.com"
-                  className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/10 text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#FF5722] focus:ring-1 focus:ring-[#FF5722] transition-all"
+                  placeholder="you@example.com"
+                  className="w-full px-4 py-3 rounded-[4px] bg-[#f5f3f1] dark:bg-white/[0.04] border border-[#ebe8e4] dark:border-white/[0.08] text-[#000000] dark:text-white placeholder-[#a59f97] dark:placeholder-white/25 text-sm focus:outline-none focus:border-[#000000]/40 dark:focus:border-white/40 transition-all"
+                  disabled={submitting}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-white/80 uppercase tracking-wider mb-1.5">
-                    Your Profile
-                  </label>
-                  <select
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
-                    className="w-full px-3.5 py-3 rounded-xl bg-[#181822] border border-white/10 text-white text-xs sm:text-sm focus:outline-none focus:border-[#FF5722] transition-all"
-                  >
-                    <option value="student">College Student</option>
-                    <option value="developer">Developer / Engineer</option>
-                    <option value="creative">Designer / Creative</option>
-                    <option value="founder">Founder / Builder</option>
-                    <option value="professional">Working Professional</option>
-                  </select>
-                </div>
+              {error && (
+                <p className="text-sm text-red-500 mt-2">{error}</p>
+              )}
 
-                <div>
-                  <label className="block text-xs font-semibold text-white/80 uppercase tracking-wider mb-1.5">
-                    Signature Flavor
-                  </label>
-                  <select
-                    value={flavor}
-                    onChange={(e) => setFlavor(e.target.value)}
-                    className="w-full px-3.5 py-3 rounded-xl bg-[#181822] border border-white/10 text-white text-xs sm:text-sm focus:outline-none focus:border-[#FF5722] transition-all"
-                  >
-                    <option value="mint">Mint Breeze (Signature)</option>
-                    <option value="citrus">Yuzu Lemon Citrus</option>
-                    <option value="orange">Blood Orange</option>
-                    <option value="berry">Wild Berry (Caffeine-Free)</option>
-                    <option value="tropical">Tropical Sol</option>
-                  </select>
-                </div>
-              </div>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full py-3.5 rounded-full bg-[#000000] text-white hover:bg-[#1a1a1a] dark:bg-white dark:text-black dark:hover:bg-white/90 font-medium text-sm transition-all duration-200 active:scale-[0.98] border border-[#e5e5e5] dark:border-transparent flex items-center justify-center gap-2 disabled:opacity-60 shadow-sm"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Submitting...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Join Waitlist</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
 
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  className="w-full py-4 rounded-full bg-[#FF5722] hover:bg-white text-white hover:text-black font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl shadow-[#FF5722]/30 active:scale-98 cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <span>Confirm Priority Spot</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="pt-1 flex items-center justify-center gap-2 text-[11px] text-white/40">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#FF5722]" />
-                <span>Zero spam. Direct dispatch notifications only.</span>
-              </div>
+              <p className="text-center text-[11px] text-[#a59f97] dark:text-white/30 mt-2">
+                No payment required. We only send launch updates.
+              </p>
             </form>
           </div>
         ) : (
-          <div className="text-center py-4">
-            <div className="w-16 h-16 rounded-full bg-[#FF5722]/20 border border-[#FF5722]/40 text-[#FF5722] flex items-center justify-center mx-auto mb-5">
-              <CheckCircle className="w-8 h-8" />
+          <div className="p-6 sm:p-8 text-center py-12">
+            <div className="w-14 h-14 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-5">
+              <CheckCircle className="w-7 h-7" />
             </div>
 
-            <span className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono tracking-widest uppercase text-white/60 mb-3">
-              ACCESS RESERVED
-            </span>
-
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight uppercase">
-              YOU'RE ON THE LIST.
+            <h3 className="text-2xl font-light tracking-tight text-[#000000] dark:text-white">
+              You're on the list.
             </h3>
 
-            <p className="text-xs sm:text-sm text-white/60 mt-2 max-w-sm mx-auto leading-relaxed">
-              We've allocated your spot for Batch 01. Watch your inbox at <span className="text-white font-medium">{email}</span> for private drop details.
+            <p className="text-sm text-[#777169] dark:text-white/50 mt-3 max-w-sm mx-auto leading-relaxed">
+              We'll email <span className="text-[#000000] dark:text-white font-medium">{email}</span> when
+              AVRO's first batch is ready.
             </p>
 
-            {/* Queue Badge */}
-            <div className="my-6 p-4 rounded-2xl bg-white/[0.03] border border-white/8">
-              <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest block mb-1">
-                YOUR PRIORITY TICKET
-              </span>
-              <span className="text-3xl font-mono font-extrabold text-[#FF5722] tracking-tight">
-                #AVRO-{ticketNumber}
-              </span>
-            </div>
-
-            {/* Referral / Share */}
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-white/[0.02] border border-white/6 text-left">
-              <input
-                type="text"
-                readOnly
-                value={`https://avro.in/waitlist?ref=AVRO-${ticketNumber}`}
-                className="flex-1 bg-transparent px-2 text-xs text-white/60 font-mono focus:outline-none truncate"
-              />
-              <button
-                onClick={handleCopyLink}
-                className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white text-white hover:text-black text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
-              >
-                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied' : 'Copy'}</span>
-              </button>
-            </div>
+            <p className="text-xs text-[#a59f97] dark:text-white/25 mt-6 italic">
+              Note: This is a local registration only. No data has been sent to a server — a backend integration is needed for production.
+            </p>
 
             <button
-              onClick={onClose}
-              className="mt-6 text-xs text-white/40 hover:text-white transition-colors cursor-pointer"
+              onClick={() => handleOpenChange(false)}
+              className="mt-8 rounded-full border border-[#ebe8e4] dark:border-white/10 px-5 py-2 text-sm text-[#44403b] hover:text-[#000000] dark:text-white/60 dark:hover:text-white bg-[#f5f3f1] dark:bg-white/[0.05] transition-colors"
             >
-              Close and explore the site
+              Close and explore
             </button>
           </div>
         )}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }

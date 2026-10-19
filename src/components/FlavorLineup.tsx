@@ -96,10 +96,10 @@ export const FlavorLineup: React.FC<FlavorLineupProps> = ({
   }
 
   return (
-    <section id="flavors" className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative border-t border-white/[0.08] bg-[#09090C] overflow-hidden">
+    <section id="flavors" className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 relative border-t border-[#ebe8e4] dark:border-white/[0.08] bg-[#fdfcfc] dark:bg-[#08080A] text-[#000000] dark:text-white overflow-hidden transition-colors duration-500">
       {/* Dynamic Ambient Background Glow */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] blur-[150px] pointer-events-none rounded-full transition-all duration-700 opacity-40"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] blur-[150px] pointer-events-none rounded-full transition-all duration-700 opacity-20 dark:opacity-40"
         style={{
           background: `radial-gradient(circle, ${activeFlavor.color} 0%, transparent 70%)`,
         }}
@@ -108,21 +108,21 @@ export const FlavorLineup: React.FC<FlavorLineupProps> = ({
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-[11px] font-mono text-white/80 tracking-widest uppercase mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#f5f3f1] dark:bg-white/[0.04] border border-[#ebe8e4] dark:border-white/10 text-[11px] font-mono text-[#44403b] dark:text-white/80 tracking-widest uppercase mb-4">
             <Sparkles className="w-3.5 h-3.5" style={{ color: activeFlavor.color }} />
             <span>OFFICIAL PRODUCT FLAVOR LINEUP</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white uppercase">
-            CHOOSE YOUR FLAVOR.
+          <h2 className="whisper-display text-4xl sm:text-5xl lg:text-6xl font-[300] tracking-[-0.02em] text-[#000000] dark:text-white">
+            Choose your flavor.
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-white/60 font-normal leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base text-[#777169] dark:text-white/60 font-normal leading-relaxed">
             Five signature expressions. Select any flavor to explore its real 3D packaging and adaptive palette.
           </p>
         </div>
 
-        {/* Master Showcase Banner */}
-        <div className="rounded-3xl sm:rounded-[2.5rem] p-2.5 sm:p-3 bg-[#121218] border border-white/10 backdrop-blur-2xl mb-12 shadow-2xl">
-          <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden aspect-[16/9] sm:aspect-[16/8] bg-black border border-white/8 group">
+        {/* Master Showcase Banner (Warm Taupe #f5f3f1, 24px radius) */}
+        <div className="rounded-[24px] p-2.5 sm:p-3 bg-[#f5f3f1] dark:bg-[#121214] border border-[#ebe8e4] dark:border-white/10 backdrop-blur-2xl mb-12 shadow-xs">
+          <div className="relative rounded-[20px] overflow-hidden aspect-[16/9] sm:aspect-[16/8] bg-white dark:bg-black border border-[#ebe8e4] dark:border-white/8 group">
             <img
               src="/assets/AVRO Caffeine Strips_ Five Flavours.png"
               alt="AVRO Caffeine Strips 5 Flavors Lineup"
@@ -132,10 +132,10 @@ export const FlavorLineup: React.FC<FlavorLineupProps> = ({
 
             <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4 z-10">
               <div>
-                <span className="text-[10px] font-mono tracking-widest uppercase font-bold" style={{ color: activeFlavor.color }}>
+                <span className="text-[10px] font-mono tracking-widest uppercase font-bold text-white/90">
                   THE 5-FLAVOR SUITE · DEMO CONCEPT
                 </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">
+                <h3 className="text-xl sm:text-2xl font-light text-white mt-1 tracking-tight">
                   BLOOD ORANGE · MINT · LEMON CITRUS · WILD BERRY · TROPICAL
                 </h3>
                 <p className="text-xs sm:text-sm text-white/70 mt-1">
@@ -145,8 +145,7 @@ export const FlavorLineup: React.FC<FlavorLineupProps> = ({
 
               <div className="flex items-center gap-2">
                 <span
-                  className="px-3.5 py-1.5 rounded-full bg-black/80 border border-white/20 backdrop-blur-md text-xs font-mono"
-                  style={{ color: activeFlavor.color }}
+                  className="px-3.5 py-1.5 rounded-full bg-black/80 border border-white/20 backdrop-blur-md text-xs font-mono text-white"
                 >
                   FAST DISSOLVING · WATER FREE
                 </span>
@@ -163,14 +162,11 @@ export const FlavorLineup: React.FC<FlavorLineupProps> = ({
               <button
                 key={flavor.id}
                 onClick={() => handleSelectCard(flavor.id)}
-                className={`p-4 rounded-2xl sm:rounded-3xl border text-left transition-all duration-300 cursor-pointer ${
+                className={`p-4 rounded-[20px] border text-left transition-all duration-300 cursor-pointer ${
                   isSelected
-                    ? `bg-[#181822] ${flavor.borderColor} shadow-xl scale-[1.02]`
-                    : 'bg-white/[0.02] border-white/8 hover:bg-white/[0.04]'
+                    ? 'bg-[#fdfcfc] dark:bg-[#18181A] border-[#000000] dark:border-white/40 shadow-xs scale-[1.02]'
+                    : 'bg-[#f5f3f1] dark:bg-white/[0.02] border-[#ebe8e4] dark:border-white/8 hover:bg-[#ebe8e4]/60'
                 }`}
-                style={{
-                  boxShadow: isSelected ? flavor.glow : 'none',
-                }}
               >
                 <div className="flex items-center justify-between mb-2">
                   <span
@@ -180,48 +176,48 @@ export const FlavorLineup: React.FC<FlavorLineupProps> = ({
                       transform: isSelected ? 'scale(1.2)' : 'scale(1)'
                     }}
                   />
-                  <span className="text-[10px] font-mono text-white/40">{flavor.count}</span>
+                  <span className="text-[10px] font-mono text-[#a59f97] dark:text-white/40">{flavor.count}</span>
                 </div>
-                <h4 className="text-sm font-bold text-white tracking-wide">{flavor.name}</h4>
-                <p className="text-[11px] text-white/50 truncate mt-0.5">{flavor.badge}</p>
+                <h4 className="text-sm font-[500] text-[#000000] dark:text-white tracking-wide">{flavor.name}</h4>
+                <p className="text-[11px] text-[#777169] dark:text-white/50 truncate mt-0.5">{flavor.badge}</p>
               </button>
             )
           })}
         </div>
 
         {/* Active Flavor Deep-Dive Specification Card */}
-        <div className="rounded-3xl sm:rounded-[2.5rem] p-6 sm:p-10 bg-[#121218] border border-white/10 shadow-2xl">
+        <div className="rounded-[24px] p-6 sm:p-10 bg-[#f5f3f1] dark:bg-[#121214] border border-[#ebe8e4] dark:border-white/10 shadow-xs">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex-1 text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fdfcfc] dark:bg-white/5 border border-[#ebe8e4] dark:border-white/10 text-xs font-mono mb-4">
                 <span
                   className="w-2 h-2 rounded-full animate-pulse"
                   style={{ backgroundColor: current.color }}
                 />
-                <span className="text-white font-semibold">{current.name}</span>
-                <span className="text-white/40">|</span>
-                <span className="text-white/60">{current.badge}</span>
+                <span className="text-[#000000] dark:text-white font-[500]">{current.name}</span>
+                <span className="text-[#ebe8e4] dark:text-white/40">|</span>
+                <span className="text-[#777169] dark:text-white/60">{current.badge}</span>
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              <h3 className="whisper-heading text-2xl sm:text-3xl font-[300] tracking-[-0.02em] text-[#000000] dark:text-white">
                 {current.tagline}
               </h3>
 
-              <p className="mt-3 text-sm text-white/70 leading-relaxed font-normal max-w-xl">
+              <p className="mt-3 text-sm text-[#44403b] dark:text-white/70 leading-relaxed font-normal max-w-xl">
                 {current.profile}
               </p>
 
-              <div className="mt-6 flex flex-wrap items-center gap-4 text-xs font-mono text-white/60">
+              <div className="mt-6 flex flex-wrap items-center gap-4 text-xs font-mono text-[#777169] dark:text-white/60">
                 <div className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5" style={{ color: current.color }} />
+                  <Check className="w-3.5 h-3.5 text-[#000000] dark:text-white" />
                   <span>{current.packaging}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5" style={{ color: current.color }} />
+                  <Check className="w-3.5 h-3.5 text-[#000000] dark:text-white" />
                   <span>{current.actives}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5" style={{ color: current.color }} />
+                  <Check className="w-3.5 h-3.5 text-[#000000] dark:text-white" />
                   <span>Zero Water Required</span>
                 </div>
               </div>
@@ -229,25 +225,21 @@ export const FlavorLineup: React.FC<FlavorLineupProps> = ({
 
             <div className="flex flex-col items-center gap-3 shrink-0">
               {/* Strip Color Swatch Preview */}
-              <div className="flex flex-col items-center p-4 rounded-2xl bg-white/[0.02] border border-white/6">
-                <span className="text-[10px] font-mono text-white/40 uppercase mb-2">
+              <div className="flex flex-col items-center p-4 rounded-[16px] bg-[#fdfcfc] dark:bg-white/[0.02] border border-[#ebe8e4] dark:border-white/6">
+                <span className="text-[10px] font-mono text-[#a59f97] dark:text-white/40 uppercase mb-2">
                   STRIP MATRIX TINT
                 </span>
                 <div
-                  className={`w-32 h-14 rounded-xl border flex items-center justify-center text-[11px] font-mono font-bold tracking-widest text-white/90 shadow-md ${current.stripColor}`}
+                  className={`w-32 h-14 rounded-xl border flex items-center justify-center text-[11px] font-mono font-medium tracking-widest text-white shadow-xs ${current.stripColor}`}
                 >
                   AVRO STRIP
                 </div>
               </div>
 
+              {/* Filled Pill CTA Button */}
               <button
                 onClick={onOpenWaitlist}
-                className="w-full py-3 px-6 rounded-full font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-lg active:scale-98 cursor-pointer flex items-center justify-center gap-2"
-                style={{
-                  backgroundColor: current.color,
-                  color: '#000',
-                  boxShadow: `0 8px 24px -4px ${current.color}66`
-                }}
+                className="w-full py-3 px-6 rounded-full font-[500] text-xs uppercase tracking-widest transition-all duration-300 shadow-xs active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2 bg-[#000000] text-white dark:bg-white dark:text-black hover:opacity-90 border border-[#e5e5e5] dark:border-transparent"
               >
                 <span>Reserve {current.name}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -258,4 +250,5 @@ export const FlavorLineup: React.FC<FlavorLineupProps> = ({
       </div>
     </section>
   )
+
 }
