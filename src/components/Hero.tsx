@@ -1,7 +1,6 @@
 import React from 'react'
 import { ArrowRight } from 'lucide-react'
 import { ThreeWebGPUScene } from './ThreeWebGPUScene'
-import { InterstellarFluidHero } from './InterstellarFluidHero'
 import { FLAVORS, FlavorData } from '../constants/flavors'
 
 interface HeroProps {
@@ -21,12 +20,21 @@ export const Hero: React.FC<HeroProps> = ({
   }
 
   return (
-    <section className="relative min-h-[100dvh] w-full bg-[#fdfcfc] dark:bg-[#06060A] text-[#000000] dark:text-white flex flex-col overflow-hidden transition-colors duration-500">
-      {/* Layer 0: Interstellar Fluid Background for Dark Mode */}
+    <section className="relative min-h-[100dvh] w-full bg-[#fdfcfc] dark:bg-[#525256] text-[#000000] dark:text-white flex flex-col overflow-hidden transition-colors duration-500">
+      {/* Layer 0: Studio Matte Gray Background for Dark Mode (faithful to Screenshot 1) */}
       <div className="hidden dark:block absolute inset-0 z-0 pointer-events-none">
-        <InterstellarFluidHero
-          flavorColor={activeFlavor.color}
-          intensity={0.8}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse 95% 85% at 50% 45%, #5a5a5e 0%, #525256 50%, #46464a 100%)'
+          }}
+        />
+        {/* Soft flavor-reactive warm halo behind the 3D box */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[550px] rounded-full blur-[140px] opacity-20 transition-all duration-700"
+          style={{
+            background: `radial-gradient(circle, ${activeFlavor.color} 0%, transparent 70%)`
+          }}
         />
       </div>
 
@@ -41,10 +49,9 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="absolute inset-0 bg-gradient-to-b from-[#fdfcfc]/30 via-transparent to-[#fdfcfc]" />
       </div>
 
-      {/* Layer 1: Dark Mode Ambient Depth Gradient */}
-      <div className="hidden dark:block absolute inset-0 z-[1] pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#06060A] via-[#06060A]/20 to-transparent opacity-80" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#06060A]/40 via-transparent to-[#06060A]/20" />
+      {/* Layer 1: Dark Mode Ambient Depth Vignette */}
+      <div className="hidden dark:block absolute inset-0 z-[1] pointer-events-none opacity-30">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30" />
       </div>
 
       {/* Layer 2: Three.js Product Scene - pointer-events-auto so 360-degree drag works everywhere */}
